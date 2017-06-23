@@ -49,6 +49,8 @@ register.
 | FRAME       | Wait                                       | Display the changes on the LED-Strips and Wait                    |
 | GOTO        | Label                                      | Jump to a given label and continue execution from there on        |
 
+See `shows/` for example programms as Assembler-Code and in compiled format.
+
 ## Compiler
 There is a small compiler written in PHP located in `compiler/`. It's a
 CLI-Script that is invoked in the way
