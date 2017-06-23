@@ -1,5 +1,5 @@
 # ledc
-Really ugly opcode to controll LED-Shows in constrained environments.
+Really ugly opcode to control LED-Shows in constrained environments.
 
 LEGO has built an incredible [ferris wheel](https://shop.lego.com/en-US/Ferris-Wheel-10247),
 but it is even more awesome when you add some more visual effects to it.
@@ -30,7 +30,7 @@ places use `SETCOLOR0` and `SETCOLOR1` for this.
 The virtual-machine here is capabale of driving 16 LED-Strips and has
 up to 16 registers to store things in background. You may also define
 up to 16 groups of LED-Strips and registers that could be controlled
-using normal instructions as you would controll a single LED-Strip or
+using normal instructions as you would control a single LED-Strip or
 register.
 
 ## Assembler
@@ -65,6 +65,22 @@ Arduino-Interpreter.
 ## Emulator
 There is an Emulator to run `ledc`-programms via Javascript in HTML located in `emulator/`.
 
-## Incomplete
-This repository is incomplete at the moment as components are in different
-places and have to be concentrated here.
+## Interpreter
+The actual programm that executes `ledc`-code and creates the magic may be
+found in `interpreter/`. It's a small arduino-project that implements the
+interpreter and drives the APA102-LED-Strips using Software-SPI.
+
+All LED-Strips are controlled in parallel - you'll need (Number of Strips + 1)
+GPIO-Pins to drive the LED-Strips, one GPIO per Strip for Data and one GPIO
+as clock connected to all Strips.
+
+The programm expected all GPIO-Pins to be populated in ascending order, e.g.
+first strip at GPIO 3, second strip at GPIO 4, etc.. But you may group
+strips into up to four banks of LED-Strip-Connectors. You'll find some
+`#define`'s for this on the code.
+
+## Copyright & License
+Copyright (C) 2017 Bernd Holzmüller
+
+Licensed under the GNU General Public License v3.0 (GPL). This is free software: you are
+free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
