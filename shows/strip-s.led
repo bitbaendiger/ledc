@@ -1,0 +1,110 @@
+DEFINE		wait, 32
+COLOR           2, 255, 255, 0
+
+# Frame 1
+start:
+SHIFTR          0, 12
+SETS		0, 1
+FRAME		$wait
+
+# Frame 2
+SHIFTR		0, 12
+SETS		0, 2
+FRAME		$wait
+
+# Frame 3
+SHIFTR		0, 12
+SETS		0, 3
+FRAME		$wait
+
+# Frame 4
+SHIFTR		0, 12
+SETS		0, 4
+FRAME		$wait
+
+# Frame 5
+SHIFTR		0, 12
+MIRRORS		16, 0, 1
+SETS		1, 4
+FRAME		$wait
+
+# Frame 6
+SHIFTR		0, 12
+SETS		2, 4
+FRAME		$wait
+
+# Frame 7
+SHIFTR		0, 12
+SETS		3, 4
+FRAME		$wait
+
+# Frame 8
+loop:
+SHIFTR		0, 12
+SETS		4, 4
+FRAME		$wait
+
+# Frame 9
+SHIFTR		0, 12
+SETS		5, 4
+FRAME		$wait
+
+# Frame 10
+SHIFTR		0, 12
+SETS		6, 4
+FRAME		$wait
+
+# Frame 11
+SHIFTR		0, 12
+SETS		7, 4
+FRAME		$wait
+
+# Frame 12
+SHIFTR		0, 12
+SETS		8, 4
+FRAME		$wait
+
+# Frame 13
+SHIFTR		0, 12
+SETS		0, 1
+SETS		9, 4
+FRAME		$wait
+
+# Frame 14
+SHIFTR		0, 12
+SETS		0, 2
+SETS		10, 4
+FRAME		$wait
+
+# Frame 15
+SHIFTR		0, 12
+SETS		0, 3
+SETS		11, 4
+FRAME		$wait
+
+# Frame 16
+SHIFTR		0, 12
+SETS		0, 4
+SETS		12, 4
+FRAME		$wait
+
+# Frame 17
+SHIFTR		0, 12
+SETS		1, 4
+SETS		13, 3
+FRAME		$wait
+
+# Frame 18
+SHIFTR		0, 12
+SETS		2, 4
+SETS		14, 2
+FRAME		$wait
+
+# Frame 19
+SHIFTR		0, 12
+SETS		3, 4
+SETS		15, 1
+FRAME		$wait
+
+# Continue
+GOTO		loop

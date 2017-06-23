@@ -1,0 +1,315 @@
+COLOR           2, 255, 255, 0
+
+start:
+# Clear everything
+MIRRORS		16, 0, 16
+
+# Frame 1
+SETDEST		0
+SETS		0, 1
+FRAME		125
+
+# Frame 2
+MIRRORS		0, 1, 1
+SETS		0, 2
+FRAME		125
+
+# Frame 3
+MIRRORS		1, 2, 1
+MIRRORS		0, 1, 1
+SETS		0, 3
+FRAME		125
+
+# Frame 4
+MIRRORS		2, 3, 1
+MIRRORS		1, 2, 1
+MIRRORS		0, 1, 1
+SETS		0, 4
+FRAME		125
+
+# Frame 5
+MIRRORS		3, 4, 1
+MIRRORS		2, 3, 1
+MIRRORS		1, 2, 1
+MIRRORS		0, 1, 1
+MIRRORS		16, 0, 1
+SETS		1, 4
+FRAME		125
+
+# Frame 6
+MIRRORS		4, 5, 1
+MIRRORS		3, 4, 1
+MIRRORS		2, 3, 1
+MIRRORS		1, 2, 1
+MIRRORS		0, 1, 1
+COPY		0, 0, 0, 5, 1
+FRAME		125
+
+# Frame 6
+MIRRORS		5, 6, 1
+MIRRORS		4, 5, 1
+MIRRORS		3, 4, 1
+MIRRORS		2, 3, 1
+MIRRORS		1, 2, 1
+COPY		1, 1, 0, 5, 1
+COPY		0, 0, 1, 5, 2
+FRAME		125
+
+MIRRORS		6, 7, 1
+MIRRORS		5, 6, 1
+MIRRORS		4, 5, 1
+MIRRORS		3, 4, 1
+MIRRORS		2, 3, 1
+COPY		2, 2, 0, 5, 1
+COPY		1, 1, 1, 5, 2
+COPY		0, 0, 2, 5, 3
+FRAME		125
+
+MIRRORS		7, 8, 1
+MIRRORS		6, 7, 1
+MIRRORS		5, 6, 1
+MIRRORS		4, 5, 1
+MIRRORS		3, 4, 1
+COPY		3, 3, 0, 5, 1
+COPY		2, 2, 1, 5, 2
+COPY		1, 1, 2, 5, 3
+COPY		0, 0, 3, 5, 4
+FRAME		125
+
+MIRRORS		8, 9, 1
+MIRRORS		7, 8, 1
+MIRRORS		6, 7, 1
+MIRRORS		5, 6, 1
+MIRRORS		4, 5, 1
+COPY		4, 4, 0, 5, 1
+COPY		3, 3, 1, 5, 2
+COPY		2, 2, 2, 5, 3
+COPY		1, 1, 3, 5, 4
+COPY		0, 0, 4, 5, 5
+FRAME		125
+
+MIRRORS		9, 10, 1
+MIRRORS		8, 9, 1
+MIRRORS		7, 8, 1
+MIRRORS		6, 7, 1
+MIRRORS		5, 6, 1
+COPY		5, 5, 0, 5, 1
+COPY		4, 4, 1, 5, 2
+COPY		3, 3, 2, 5, 3
+COPY		2, 2, 3, 5, 4
+COPY		1, 1, 4, 5, 5
+COPY		0, 0, 5, 5, 6
+FRAME		125
+
+MIRRORS		10, 11, 1
+MIRRORS		9, 10, 1
+MIRRORS		8, 9, 1
+MIRRORS		7, 8, 1
+MIRRORS		6, 7, 1
+COPY		6, 6, 0, 5, 1
+COPY		5, 5, 1, 5, 2
+COPY		4, 4, 2, 5, 3
+COPY		3, 3, 3, 5, 4
+COPY		2, 2, 4, 5, 5
+COPY		1, 1, 5, 5, 6
+COPY		0, 0, 6, 5, 7
+FRAME		125
+
+MIRRORS		10, 11, 1
+MIRRORS		9, 10, 1
+MIRRORS		8, 9, 1
+MIRRORS		7, 8, 1
+COPY		7, 7, 0, 5, 1
+COPY		6, 6, 1, 5, 2
+COPY		5, 5, 2, 5, 3
+COPY		4, 4, 3, 5, 4
+COPY		3, 3, 4, 5, 5
+COPY		2, 2, 5, 5, 6
+COPY		1, 1, 6, 5, 7
+COPY		0, 0, 7, 5, 8
+FRAME		125
+
+MIRRORS		10, 11, 1
+MIRRORS		9, 10, 1
+MIRRORS		8, 9, 1
+COPY		8, 8, 0, 5, 1
+COPY		7, 7, 1, 5, 2
+COPY		6, 6, 2, 5, 3
+COPY		5, 5, 3, 5, 4
+COPY		4, 4, 4, 5, 5
+COPY		3, 3, 5, 5, 6
+COPY		2, 2, 6, 5, 7
+COPY		1, 1, 7, 5, 8
+COPY		0, 0, 8, 5, 9
+FRAME		125
+
+MIRRORS		10, 11, 1
+MIRRORS		9, 10, 1
+COPY		9, 9, 0, 5, 1
+COPY		8, 8, 1, 5, 2
+COPY		7, 7, 2, 5, 3
+COPY		6, 6, 3, 5, 4
+COPY		5, 5, 4, 5, 5
+COPY		4, 4, 5, 5, 6
+COPY		3, 3, 6, 5, 7
+COPY		2, 2, 7, 5, 8
+COPY		1, 1, 8, 5, 9
+COPY		0, 0, 9, 5, 10
+FRAME		125
+
+MIRRORS		10, 11, 1
+COPY		10, 10, 0, 5, 1
+COPY		9, 9, 1, 5, 2
+COPY		8, 8, 2, 5, 3
+COPY		7, 7, 3, 5, 4
+COPY		6, 6, 4, 5, 5
+COPY		5, 5, 5, 5, 6
+COPY		4, 4, 6, 5, 7
+COPY		3, 3, 7, 5, 8
+COPY		2, 2, 8, 5, 9
+COPY		1, 1, 9, 5, 10
+COPY		0, 0, 10, 5, 11
+FRAME		125
+
+COPY		11, 11, 0, 5, 1
+COPY		10, 10, 1, 5, 2
+COPY		9, 9, 2, 5, 3
+COPY		8, 8, 3, 5, 4
+COPY		7, 7, 4, 5, 5
+COPY		6, 6, 5, 5, 6
+COPY		5, 5, 6, 5, 7
+COPY		4, 4, 7, 5, 8
+COPY		3, 3, 8, 5, 9
+COPY		2, 2, 9, 5, 10
+COPY		1, 1, 10, 5, 11
+COPY		0, 0, 11, 4, 12
+FRAME		125
+
+COPY		11, 11, 1, 5, 2
+COPY		10, 10, 2, 5, 3
+COPY		9, 9, 3, 5, 4
+COPY		8, 8, 4, 5, 5
+COPY		7, 7, 5, 5, 6
+COPY		6, 6, 6, 5, 7
+COPY		5, 5, 7, 5, 8
+COPY		4, 4, 8, 5, 9
+COPY		3, 3, 9, 5, 10
+COPY		2, 2, 10, 5, 11
+COPY		1, 1, 11, 4, 12
+COPY		0, 0, 12, 3, 13
+FRAME		125
+
+COPY		11, 11, 2, 5, 3
+COPY		10, 10, 3, 5, 4
+COPY		9, 9, 4, 5, 5
+COPY		8, 8, 5, 5, 6
+COPY		7, 7, 6, 5, 7
+COPY		6, 6, 7, 5, 8
+COPY		5, 5, 8, 5, 9
+COPY		4, 4, 9, 5, 10
+COPY		3, 3, 10, 5, 11
+COPY		2, 2, 11, 4, 12
+COPY		1, 1, 12, 3, 13
+COPY		0, 0, 13, 2, 14
+FRAME		125
+
+COPY		11, 11, 3, 5, 4
+COPY		10, 10, 4, 5, 5
+COPY		9, 9, 5, 5, 6
+COPY		8, 8, 6, 5, 7
+COPY		7, 7, 7, 5, 8
+COPY		6, 6, 8, 5, 9
+COPY		5, 5, 9, 5, 10
+COPY		4, 4, 10, 5, 11
+COPY		3, 3, 11, 4, 12
+COPY		2, 2, 12, 3, 13
+COPY		1, 1, 13, 2, 14
+COPY		0, 0, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 4, 5, 5
+COPY		10, 10, 5, 5, 6
+COPY		9, 9, 6, 5, 7
+COPY		8, 8, 7, 5, 8
+COPY		7, 7, 8, 5, 9
+COPY		6, 6, 9, 5, 10
+COPY		5, 5, 10, 5, 11
+COPY		4, 4, 11, 4, 12
+COPY		3, 3, 12, 3, 13
+COPY		2, 2, 13, 2, 14
+COPY		1, 1, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 5, 5, 6
+COPY		10, 10, 6, 5, 7
+COPY		9, 9, 7, 5, 8
+COPY		8, 8, 8, 5, 9
+COPY		7, 7, 9, 5, 10
+COPY		6, 6, 10, 5, 11
+COPY		5, 5, 11, 4, 12
+COPY		4, 4, 12, 3, 13
+COPY		3, 3, 13, 2, 14
+COPY		2, 2, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 6, 5, 7
+COPY		10, 10, 7, 5, 8
+COPY		9, 9, 8, 5, 9
+COPY		8, 8, 9, 5, 10 
+COPY		7, 7, 10, 5, 11
+COPY		6, 6, 11, 4, 12
+COPY		5, 5, 12, 3, 13
+COPY		4, 4, 13, 2, 14
+COPY		3, 3, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 7, 5, 8
+COPY		10, 10, 8, 5, 9
+COPY		9, 9, 9, 5, 10
+COPY		8, 8, 10, 5, 11
+COPY		7, 7, 11, 4, 12
+COPY		6, 6, 12, 3, 13
+COPY		5, 5, 13, 2, 14
+COPY		4, 4, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 8, 5, 9
+COPY		10, 10, 9, 5, 10
+COPY		9, 9, 10, 5, 11
+COPY		8, 8, 11, 4, 12
+COPY		7, 7, 12, 3, 13
+COPY		6, 6, 13, 2, 14
+COPY		5, 5, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 9, 5, 10
+COPY		10, 10, 10, 5, 11
+COPY		9, 9, 11, 4, 12
+COPY		8, 8, 12, 3, 13
+COPY		7, 7, 13, 2, 14
+COPY		6, 6, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 10, 5, 11
+COPY		10, 10, 11, 4, 12
+COPY		9, 9, 12, 3, 13
+COPY		8, 8, 13, 2, 14
+COPY		7, 7, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 11, 4, 12
+COPY		10, 10, 12, 3, 13
+COPY		9, 9, 13, 2, 14
+COPY		8, 8, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 12, 3, 13
+COPY		10, 10, 13, 2, 14
+COPY		9, 9, 14, 1, 15
+FRAME		125
+
+COPY		11, 11, 13, 2, 14
+COPY		10, 10, 14, 1, 15
+FRAME		125
+
+GOTO		start

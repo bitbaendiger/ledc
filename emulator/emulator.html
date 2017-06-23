@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>LED VM</title>
+  
+  <style type="text/css">
+  
+    div.strip {
+      display: inline-block;
+      width: 30px;
+      margin-right: 10px;
+      padding: 5px;
+      border: 1px solid #000;
+      background: #0a0;
+      text-align: center;
+    }
+    
+    div.led {
+      display: block;
+      width: 20px;
+      height: 20px;
+      margin: 5px auto;
+      border-radius: 10px;
+      border-color: #000;
+      border-style: solid;
+      background-color: #333;
+    }
+    
+    div.col-md-6 {
+      display: inline-block;
+      box-sizing: border-box;
+      width: 49;
+      vertical-align: top;
+    }
+    
+    div.row {
+      vertical-align: top;
+    }
+    
+    #opcode-table {
+      border-spacing: 0;
+    }
+    
+    #opcode-table td {
+      padding: 0 5px;
+      font-family: monospace;
+    }
+    
+    #opcode-table td:first-child {
+      text-align: right;
+    }
+    
+  
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="heading">LED VM</h1>
+        
+        <p>
+          <label for="count">Number of LED-Strips</label>
+          <input type="number" value="8" max="16" min="1" id="count" />
+        </p><p>
+          <label for="clock">Clock-Speed Level</label>
+          <input type="number" value="10" max="10" min="1" id="clock" />
+        </p><p>
+          <label for="program">Compiled Program</label>
+          <input type="file" id="program" />
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6" id="strips"></div>
+      <div class="col-md-6">
+        <table class="table" id="opcode-table"></table>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  
+    var opdict = [ 'SETDEST', 'SETS', 'SETI', null, null, 'COPY', 'MIRRORS', null, 'SHIFTR', null, 'GROUPADDS', 'GROUPADDI', 'FRAME', 'GOTO', 'COLOR' ];
+    var pm;
+    var pc = 0, lpc = 0, ptr = 0;
+    var proc;
+    var black = { red : 0, green : 0, blue : 0, brightness : 0 };
+    var color = black;
+    var regs;
+    var groups;
+    
+    var OP_COPY    = 0x05;
+    var OP_MIRRORS = 0x06;
+    var OP_SHIFTR  = 0x08;
+    var OP_GOTO    = 0x0D;
+    var OP_COLOR   = 0x0E;
+    
+    function startVM () {
+      if (proc);
+        clearTimeout (proc);
+      
+      // Reset the VM
+      lpc = 0;
+      pc = 0;
+      color = black;
+      proc = false;
+      ptr = 0;
+      regs = [
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ],
+        [ color, color, color, color, color, color, color, color, color, color, color, color, color, color, color, color ]
+      ];
+      groups = [ [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ], [ ] ];
+      
+      runVM ();
+    }
+    
+    function spx (dst, idx, clr) {
+      if (dst > 31) {
+        for (var i = 0; i < groups [dst - 32].length; i++)
+          spx (groups [dst - 32][i], idx, clr);
+        
+        return;
+      }
+      
+      if (dst > 15)
+        return regs [dst - 15][idx] = clr;
+      
+      var sc = document.getElementById ('strips');
+      
+      if (sc.childNodes.length <= dst)
+        return;
+      
+      if (sc.childNodes [dst].childNodes.length <= idx)
+        return;
+      
+      sc.childNodes [dst].childNodes [idx].clr = clr;
+    }
+    
+    function gpxs (src, strt, len) {
+      var r = [ ];
+      
+      if (src > 31) {
+        if (groups [src - 32].length == 0)
+          return r;
+        
+        src = groups [src - 32][0];
+      }
+      
+      if (src > 15) {
+        for (var i = strt; i < strt + len; i++)
+          r.push (regs [src - 15][i]);
+        
+        return r;
+      }
+      
+      var sc = document.getElementById ('strips');
+      
+      if (sc.childNodes.length < src)
+        return r;
+      
+      if (typeof sc.childNodes [src] == 'undefined')
+        return r;
+      
+      if (sc.childNodes [src].childNodes.length < strt)
+        return r;
+      
+      for (var i = strt; i < strt + len; i++)
+        if (i < sc.childNodes [src].childNodes.length)
+          r.push (sc.childNodes [src].childNodes [i].clr);
+      
+      return r;
+    }
+    
+    function runVM () {
+      var t = 5;
+      var tb = document.getElementById ('opcode-table');
+      
+      tb.childNodes [lpc].style ['background-color'] = 'transparent';
+      tb.childNodes [pc].style ['background-color'] = '#aa0';
+      
+      if (pm [pc][0] == OP_COLOR)
+        color = { brightness : pm [pc][1], red : pm [pc][2], green : pm [pc][3], blue : pm [pc][4] };
+      else if (pm [pc][0] == 0x00)
+        ptr = pm [pc][1];
+      else if (pm [pc][0] == 0x01)
+        for (var i = pm [pc][1]; i < pm [pc][1] + pm [pc][2]; i++)
+          spx (ptr, i, color);
+      else if (pm [pc][0] == 0x02)
+        for (var i = 1; i < pm [pc].length; i++)
+          spx (ptr, pm [pc][i], color);
+      // ...
+      else if (pm [pc][0] == OP_COPY) {
+        var pxs = gpxs (pm [pc][1], pm [pc][3], pm [pc][4]);
+        
+        for (var i = 0; i < pxs.length; i++)
+          spx (pm [pc][2], pm [pc][5] + i, pxs [i]);
+      } else if (pm [pc][0] == OP_MIRRORS) {
+        var pxs = gpxs (pm [pc][1], 0, 16);
+        
+        for (var i = 0; i < pm [pc][3]; i++)
+          for (var j = 0; j < pxs.length; j++)
+            spx (pm [pc][2] + i, j, pxs [j]);
+      } else if (pm [pc][0] == OP_SHIFTR) {
+        for (var i = 0; i < (pm [pc].length == 3 ? 1 : 2); i++) {
+          for (var j = pm [pc][i + 2]; j > 0; j--) {
+            var pxs = gpxs (pm [pc][i + 1] + j - 1, 0, 16);
+            
+            for (var k = 0; k < pxs.length; k++)
+              spx (pm [pc][i + 1] + j, k, pxs [k]);
+          }
+          
+          for (var k = 0; k < 16; k++)
+            spx (pm [pc][i + 1], k, black);
+        }
+      } else if (pm [pc][0] == 0x0A) {
+        for (var i = 0; i < pm [pc][3]; i++)
+          if (groups [pm [pc][1] - 32].indexOf (pm [pc][2] + i) < 0)
+            groups [pm [pc][1] - 32].push (pm [pc][2] + i);
+      } else if (pm [pc][0] == 0x0B) {
+        for (var i = 2; i < pm [pc].length; i++)
+          if (groups [pm [pc][1] - 32].indexOf (pm [pc][i]) < 0)
+             groups [pm [pc][1] - 32].push (pm [pc][i]);
+      } else if (pm [pc][0] == 0x0C) {
+        var sc = document.getElementById ('strips');
+        
+        for (var i = 0; i < sc.childNodes.length; i++)
+          for (var j = 0; j < sc.childNodes [i].childNodes.length; j++) {
+            sc.childNodes [i].childNodes [j].style ['background-color'] = 'rgba(' +
+              sc.childNodes [i].childNodes [j].clr.red + ',' +
+              sc.childNodes [i].childNodes [j].clr.green + ',' +
+              sc.childNodes [i].childNodes [j].clr.blue + ',' +
+              parseFloat ((sc.childNodes [i].childNodes [j].clr.brightness) / 127 + 0.75) +
+            ')';
+            
+          }
+        
+        t = pm [pc][1];
+      } else if (pm [pc][0] != OP_GOTO) {
+      
+      }
+      
+      lpc = pc;
+      
+      if (pm [pc][0] == OP_GOTO)
+        pc = pm [pc][1];
+      else
+        pc++;
+      
+      if ((pc < 0) || (pc >= pm.length)) {
+        alert ('Program finished');
+        
+        return;
+      }
+      
+      proc = window.setTimeout (runVM, t * (10 / document.getElementById ('clock').value));
+    }
+    
+    function parseOpcodes (opcodes) {
+      var t = document.getElementById ('opcode-table');
+      
+      for (var i = t.childNodes.length - 1; i >= 0; i--)
+        t.removeChild (t.childNodes [i]);
+      
+      pm = [ ];
+      
+      for (var i = 0; i < opcodes.length; i+=4) {
+        // Parse the operation
+        var op = [ ];
+        var code = ((opcodes [i] & 0xF0) >> 4);
+        
+        if (code >= OP_COLOR) { // COLOR
+          op.push (OP_COLOR);
+          op.push (opcodes [i] & 0x1F);
+          op.push (opcodes [i + 1]);
+          op.push (opcodes [i + 2]);
+          op.push (opcodes [i + 3]);
+        } else if (code == 0x00) { // SETDEST
+          op.push (0x00);
+          op.push (((opcodes [i] & 0x0F) << 2) | ((opcodes [i + 1] & 0xC0) >> 6));
+        } else if (code == 0x01) { // SETS
+          op.push (0x01);
+          op.push (opcodes [i] & 0x0F);
+          op.push (((opcodes [i + 1] >> 4) & 0x0F) + 1);
+        } else if (code == 0x02) { // SETI
+          var count = opcodes [i] & 0x0F;
+          
+          op.push (0x02);
+          
+          if (count > 0)
+            op.push ((opcodes [i + 1] >> 4) & 0x0F);
+          else
+            console.log ('SETI with zero count!');
+          
+          if (count > 1)
+            op.push (opcodes [i + 1] & 0x0F);
+          
+          if (count > 2)
+            op.push ((opcodes [i + 2] >> 4) & 0x0F);
+          
+          if (count > 3)
+            op.push (opcodes [i + 2] & 0x0F);
+          
+          if (count > 4)
+            op.push ((opcodes [i + 3] >> 4) & 0x0F);
+          
+          if (count > 5)
+            op.push (opcodes [i + 3] & 0x0F);
+        } else if (code == 0x03) { // ...
+        } else if (code == 0x04) { // ...
+        } else if (code == OP_COPY) { // COPY
+          op.push (OP_COPY);
+          op.push (((opcodes [i] & 0x0F) << 2) | ((opcodes [i + 1] & 0xC0) >> 6));
+          op.push ((opcodes [i + 1] & 0x3F));
+          op.push ((opcodes [i + 2] & 0xF0) >> 4);
+          op.push ((opcodes [i + 2] & 0x0F) + 1);
+          op.push ((opcodes [i + 3] & 0xF0) >> 4);
+        } else if (code == OP_MIRRORS) { // MIRROR
+          op.push (OP_MIRRORS);
+          op.push (((opcodes [i] & 0x0F) << 2) | ((opcodes [i + 1] & 0xC0) >> 6));
+          op.push (opcodes [i + 1] & 0x3F);
+          op.push (((opcodes [i + 2] & 0xFF) >> 2) + 1);
+        // ...
+        } else if (code == OP_SHIFTR) { // SHIFTR
+          var count = ((opcodes [i] & 0x0C) >> 2);
+          
+          op.push (OP_SHIFTR);
+          
+          if (count > 0) {
+            op.push (((opcodes [i] & 0x03) << 4) | ((opcodes [i + 1] & 0xF0) >> 4));
+            op.push (opcodes [i + 1] & 0x0F);
+          } else
+            console.log ('SHIFTR with zero count');
+          
+          if (count > 1) {
+            op.push ((opcodes [i + 2] >> 2) & 0x3F);
+            op.push (((opcodes [i + 2] & 0x03) << 2) | ((opcodes [i + 3] & 0xC0) >> 6));
+          }
+        // ...
+        } else if (code == 0x0A) { // GROUPADDS
+          op.push (0x0A);
+          op.push (((opcodes [i] & 0x0F) << 2) | ((opcodes [i + 1] & 0xC0) >> 6));
+          op.push (opcodes [i + 1] & 0x3F);
+          op.push ((opcodes [i + 2] >> 2) & 0x3F);
+        } else if (code == 0x0B) { // GROUPADDI
+          var count = ((opcodes [i + 1] >> 4) & 0x03);
+          
+          op.push (0x0B);
+          op.push (((opcodes [i] & 0x0F) << 2) | ((opcodes [i + 1] & 0xC0) >> 6));
+          
+          if (count > 0)
+            op.push (((opcodes [i + 1] & 0x0F) << 2) | ((opcodes [i + 2] & 0xC0) >> 6));
+          else
+            console.log ('GROUPADDI with zero count!');
+          
+          if (count > 1)
+            op.push (opcodes [i + 2] & 0x3F);
+          
+          if (count > 2)
+            op.push ((opcodes [i + 3] >> 2) & 0x3F);
+        } else if (code == 0x0C) { // FRAME
+          op.push (0x0C);
+          op.push (((opcodes [i] & 0x0F) << 12) | (opcodes [i + 1] << 4) | ((opcodes [i + 2] & 0xF0) >> 4));
+        } else if (code == OP_GOTO) { // GOTO
+          op.push (OP_GOTO);
+          op.push ((((opcodes [i] & 0x0F) << 12) | (opcodes [i + 1] << 4) | ((opcodes [i + 2] & 0xF0) >> 4)) / 4);
+        } else
+          console.log ([ i, code, opcodes [i], opcodes [i + 1], opcodes [i + 2], opcodes [i + 3] ]);
+        
+        // Output
+        pm.push (op);
+        
+        var tr = document.createElement ('tr');
+        t.appendChild (tr);
+        
+        var e = document.createElement ('td');
+        tr.appendChild (e);
+        e.innerHTML = (i / 4) + ':';
+        
+        for (var j = 0; j < op.length; j++) {
+          e = document.createElement ('td');
+          tr.appendChild (e);
+          
+          if (j == 0)
+            e.innerHTML = opdict [op [0]];
+          else
+            e.innerHTML = op [j];
+        }
+      }
+    }
+    
+    document.getElementById ('program').onchange = function () {
+      if (this.files.length < 1)
+        return;
+      
+      var reader = new FileReader ();
+      reader.readAsArrayBuffer (this.files [0]);
+      reader.onload = function () {
+        parseOpcodes (new Uint8Array (reader.result));
+        startVM ();
+      };
+    };
+    
+    document.getElementById ('program').onchange ();
+    
+    document.getElementById ('count').onchange = function () {
+      var strips = document.getElementById ('strips');
+      var count = parseInt (this.value);
+      
+      // Check if there is anything to do
+      if (count == strips.childNodes.length)
+        return;
+      
+      // Remove strips
+      if (count < strips.childNodes.length) {
+        for (var i = strips.childNodes.length - 1; i >= count; i--)
+          strips.removeChild (strips.childNodes [i]);
+        
+        return;
+      }
+      
+      // Append strips
+      for (var i = strips.childNodes.length; i < count; i++) {
+        var e = document.createElement ('div');
+        e.setAttribute ('class', 'strip');
+        strips.appendChild (e);
+        
+        for (var j = 0; j < 16; j++) {
+          var l = document.createElement ('div');
+          l.setAttribute ('class', 'led');
+          l.clr = black;
+          e.appendChild (l);
+        }
+      }
+    };
+    
+    document.getElementById ('count').onchange ();
+  
+  </script>
+</body>
+</html>

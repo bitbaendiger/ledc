@@ -1,0 +1,74 @@
+# Write initial state to register
+# SETDEST 16
+COLOR	2, 255,   0, 0
+SETI	0, 7, 14
+COLOR   2, 0, 255, 0
+SETI    1, 8, 15
+COLOR   2, 255, 255, 0
+SETI	2, 9
+COLOR   2, 0, 0,   255
+SETI	3, 10
+COLOR   2, 255, 0,   255
+SETI	4, 11
+COLOR   2, 0, 255, 255
+SETI	5, 12
+COLOR   2, 255, 255, 255
+SETI	6, 13
+
+# Copy first frame from register to first strip
+# SETDEST 0
+# COPY	16, 0, 0, 16, 0
+# MIRRORS  0, 1, 15
+# FRAME	250
+
+# Move one step further
+start:
+COPY    0, 0, 0, 15, 1
+COLOR   2, 255, 255, 255
+SETS	0, 1
+MIRRORS	0, 1, 15
+FRAME	250
+
+# Move one step further
+COPY    0, 0, 0, 15, 1
+COLOR   2, 0, 255, 255
+SETS    0, 1
+MIRRORS	0, 1, 15
+FRAME	250
+
+# Move one step further
+COPY    0, 0, 0, 15, 1
+COLOR   2, 255, 0, 255
+SETS    0, 1
+MIRRORS	0, 1, 15
+FRAME	250
+
+# Move one step further
+COPY    0, 0, 0, 15, 1
+COLOR   2, 0, 0, 255
+SETS    0, 1
+MIRRORS	0, 1, 15
+FRAME	250
+
+# Move one step further
+COPY    0, 0, 0, 15, 1
+COLOR   2, 255, 255, 0
+SETS    0, 1
+MIRRORS	0, 1, 15
+FRAME	250
+
+# Move one step further
+COPY    0, 0, 0, 15, 1
+COLOR   2, 0, 255, 0
+SETS    0, 1
+MIRRORS	0, 1, 15
+FRAME	250
+
+# Move one step further
+COPY    0, 0, 0, 15, 1
+COLOR   2, 255, 0, 0
+SETS    0, 1
+MIRRORS	0, 1, 15
+FRAME	250
+
+GOTO start

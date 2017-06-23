@@ -1,0 +1,62 @@
+# Setup group
+GROUPADDS 32, 0, 16
+SETDEST 32
+COLOR	2, 255,   0, 0
+SETI	0, 7, 14
+COLOR   2, 0, 255, 0
+SETI    1, 8, 15
+COLOR   2, 255, 255, 0
+SETI	2, 9
+COLOR   2, 0, 0,   255
+SETI	3, 10
+COLOR   2, 255, 0,   255
+SETI	4, 11
+COLOR   2, 0, 255, 255
+SETI	5, 12
+COLOR   2, 255, 255, 255
+SETI	6, 13
+
+# Move one step further
+start:
+COPY    32, 32, 0, 15, 1
+COLOR   2, 255, 255, 255
+SETS	0, 1
+FRAME	250
+
+# Move one step further
+COPY    32, 32, 0, 15, 1
+COLOR   2, 0, 255, 255
+SETS    0, 1
+FRAME	250
+
+# Move one step further
+COPY    32, 32, 0, 15, 1
+COLOR   2, 255, 0, 255
+SETS    0, 1
+FRAME	250
+
+# Move one step further
+COPY    32, 32, 0, 15, 1
+COLOR   2, 0, 0, 255
+SETS    0, 1
+FRAME	250
+
+# Move one step further
+COPY    32, 32, 0, 15, 1
+COLOR   2, 255, 255, 0
+SETS    0, 1
+FRAME	250
+
+# Move one step further
+COPY    32, 32, 0, 15, 1
+COLOR   2, 0, 255, 0
+SETS    0, 1
+FRAME	250
+
+# Move one step further
+COPY    32, 32, 0, 15, 1
+COLOR   2, 255, 0, 0
+SETS    0, 1
+FRAME	250
+
+GOTO start
